@@ -1,0 +1,33 @@
+{
+  "name": "advent-of-code-2025",
+  "version": "1.0.0",
+  "description": "",
+  "main": "npm run compile && AOC_DEMO=false ./build/runDay.sh",
+  "engines": {
+    "node": "25.2.1"
+  },
+  "scripts": {
+    "day": "npm run compile && AOC_DEMO=false ./build/runDay.sh",
+    "day:new": "./build/newDay.sh",
+    "day:demo": "npm run compile && AOC_DEMO=true ./build/runDay.sh",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "gts lint",
+    "clean": "gts clean",
+    "compile": "./build/build.sh",
+    "fix": "gts fix",
+    "prepare": "npm run compile",
+    "pretest": "npm run compile",
+    "posttest": "npm run lint"
+  },
+  "author": "Tyler Duddy",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/lodash": "^4.17.13",
+    "@types/node": "^22.7.5",
+    "gts": "^6.0.2",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
+}

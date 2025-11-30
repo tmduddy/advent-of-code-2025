@@ -1,0 +1,7 @@
+/node_modules
+
+.git_local_repo_credentials
+
+.DS_Store
+
+/dist
