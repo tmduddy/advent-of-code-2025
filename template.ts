@@ -1,13 +1,15 @@
 import {readFileSync} from 'fs';
 import path from 'path';
 
+import { debugLog } from '../utils/utils';
+
 const inputFileName =
   process.env.AOC_DEMO === 'true' ? './demo.txt' : './input.txt';
 const input = readFileSync(path.resolve(__dirname, inputFileName), {
   encoding: 'utf8',
   flag: 'r',
 }).split('\n');
-console.log(input);
+debugLog(input);
 
 const part1 = () => {
   const solution = 0;
