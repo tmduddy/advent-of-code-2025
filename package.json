@@ -10,6 +10,7 @@
     "day": "npm run compile && AOC_DEMO=false ./build/runDay.sh",
     "day:new": "./build/newDay.sh",
     "day:demo": "npm run compile && AOC_DEMO=true ./build/runDay.sh",
+    "day:debug": "npm run compile && AOC_DEBUG=true ./build/runDay.sh",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "gts lint",
     "clean": "gts clean",
@@ -24,6 +25,8 @@
   "devDependencies": {
     "@types/lodash": "^4.17.13",
     "@types/node": "^22.7.5",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^10.1.8",
     "gts": "^6.0.2",
     "typescript": "^5.9.3"
   },

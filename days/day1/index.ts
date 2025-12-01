@@ -1,5 +1,7 @@
-import {readFileSync} from 'fs';
-import path from 'path';
+import { readFileSync } from "fs";
+import path from "path";
+
+import { debugLog } from '../utils/utils';
 
 const inputFileName =
   process.env.AOC_DEMO === 'true' ? './demo.txt' : './input.txt';
@@ -7,17 +9,81 @@ const input = readFileSync(path.resolve(__dirname, inputFileName), {
   encoding: 'utf8',
   flag: 'r',
 }).split('\n');
-console.log(input);
+debugLog(input);
 
 const part1 = () => {
-  const solution = 0;
-  console.log(`\nPart 1a: ${solution}`);
+  const instructions = input.filter(Boolean);
+  const dialSize = 100;
+  let dialPosition = 50;
+  let zeroes = 0;
+  let modifier = 1;
+
+  debugLog(instructions);
+
+  instructions.forEach((step) => {
+    const dir: "L" | 'R' = step[0];
+    const magnitude = parseInt(step.slice(1), 10);
+    if (dir === 'L') {
+      modifier = -1;
+    } else {
+      modifier = 1;
+    }
+    dialPosition = dialPosition + modifier * magnitude;
+    debugLog(dir, magnitude, dialPosition);
+    if (dialPosition % dialSize === 0) {
+      zeroes++;
+    }
+  });
+
+  const solution = zeroes;
+  console.log(`\nPart 1: ${solution}`);
 };
 
 const part2 = () => {
-  const solution = 0;
+  const instructions = input.filter(Boolean);
+  const dialSize = 100;
+  let dialPosition = 50;
+  let zeroes = 0;
+  let modifier = 1;
+
+  debugLog(instructions);
+
+  instructions.forEach((step) => {
+    const dir: 'L' | 'R' = step[0];
+    const magnitude = parseInt(step.slice(1), 10);
+    if (dir === 'L') {
+      modifier = -1;
+    } else {
+      modifier = 1;
+    }
+    let zeroPasses = Math.floor(magnitude / dialSize);
+    const lastDialPosition = dialPosition;
+    dialPosition = dialPosition + ((modifier * magnitude) % dialSize);
+    if (dialPosition === 0 && lastDialPosition != 0) {
+      // if we ended up at zero and didn't come from zero, count it
+      zeroPasses++;
+    } else if (dialPosition < 0) {
+      // normalize to real dialPosition
+      dialPosition += dialSize;
+      if (lastDialPosition !== 0) {
+        // if we ended up below zero and didn't come from 0, we passed 0
+        zeroPasses++;
+      }
+    } else if (dialPosition >= 100) {
+      // normalize to real dialPosition
+      dialPosition -= dialSize;
+      if (lastDialPosition !== 0) {
+        // if we ended up over 100 and didn't come from 0, we passed 0
+        zeroPasses++;
+      }
+    }
+    debugLog(dir, magnitude, zeroPasses, dialPosition);
+    zeroes += zeroPasses;
+  });
+
+  const solution = zeroes;
   console.log(`\nPart 2: ${solution}`);
 };
 
-part1();
-part2();
+part1(); // 1172
+part2(); // 6932
