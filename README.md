@@ -9,11 +9,7 @@ npm run day:new <number>
 ```
 will create a new directory in the days folder with the provided number and fetch the input data.
 
-You'll need a session cookie taken from a recently logged in browser session on adventofcode to accomplish this.
-
-```shell
-export SESSION="<your session cookie value>"
-```
+You'll need a session cookie taken from a recently logged in browser session on adventofcode to accomplish this. You'll be prompted for one when running each day.
 
 This also creates a `demo.txt` file that holds on to any demo data from the problem. 
 
@@ -29,8 +25,12 @@ npm run day <number>
 ```
 will execute the given day with the proper puzzle input.
 
-to just build the files and copy over the input data use
+```shell
+npm run day:debug <number>
+```
+will execute the given day with the proper puzzle input but allow debug logging.
 
+To just build the files and copy over the input data use:
 ```shell
 npm run compile
 ```
@@ -40,3 +40,15 @@ or
 ```shell
 ./build.sh
 ```
+
+### linting and formatting
+I'm trying to stick to a consistent format, so I've installed `gts` from Google.
+```shell
+npx gts init
+```
+Set up all of the required config files and 
+```
+npm run lint
+npm run fix
+```
+are maintaining the formatting. I'm leaving this exactly as-is with no customizations for ease of use.
