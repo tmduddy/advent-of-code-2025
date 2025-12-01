@@ -6,4 +6,8 @@
 
 /dist
 
+solutions.txt
+
+days/**/*.txt
+
 .env

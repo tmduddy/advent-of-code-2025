@@ -93,5 +93,5 @@ const part2 = () => {
   console.log(`\nPart 2: ${solution}`);
 };
 
-part1(); // 1172
-part2(); // 6932
+part1();
+part2();
