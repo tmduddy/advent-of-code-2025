@@ -28,8 +28,12 @@ const part1 = () => {
     } else {
       modifier = 1;
     }
+
+    // move the needle by the magnitude in the correct direction
     dialPosition = dialPosition + modifier * magnitude;
     debugLog(dir, magnitude, dialPosition);
+
+    // modulo to account for the looping dial
     if (dialPosition % dialSize === 0) {
       zeroes++;
     }
@@ -56,24 +60,28 @@ const part2 = () => {
     } else {
       modifier = 1;
     }
+    // account for moves larger than the dial size, counting each zero
     let zeroPasses = Math.floor(magnitude / dialSize);
+
     const lastDialPosition = dialPosition;
+    // Move the dial to the new position, and modulo to keep it in the dial range
     dialPosition = dialPosition + ((modifier * magnitude) % dialSize);
+
+    // if we ended up at zero and didn't come from zero, count it
     if (dialPosition === 0 && lastDialPosition !== 0) {
-      // if we ended up at zero and didn't come from zero, count it
       zeroPasses++;
     } else if (dialPosition < 0) {
-      // normalize to real dialPosition
+      // normalize to a 'real' dialPosition
       dialPosition += dialSize;
+      // if we ended up below zero and didn't come from 0, we passed 0
       if (lastDialPosition !== 0) {
-        // if we ended up below zero and didn't come from 0, we passed 0
         zeroPasses++;
       }
     } else if (dialPosition >= 100) {
-      // normalize to real dialPosition
+      // normalize to 'real' dialPosition
       dialPosition -= dialSize;
+      // if we ended up over 100 and didn't come from 0, we passed 0
       if (lastDialPosition !== 0) {
-        // if we ended up over 100 and didn't come from 0, we passed 0
         zeroPasses++;
       }
     }
