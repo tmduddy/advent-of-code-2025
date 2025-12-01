@@ -1,7 +1,7 @@
-import { readFileSync } from "fs";
-import path from "path";
+import {readFileSync} from 'fs';
+import path from 'path';
 
-import { debugLog } from '../utils/utils';
+import {debugLog} from '../utils/utils';
 
 const inputFileName =
   process.env.AOC_DEMO === 'true' ? './demo.txt' : './input.txt';
@@ -20,8 +20,8 @@ const part1 = () => {
 
   debugLog(instructions);
 
-  instructions.forEach((step) => {
-    const dir: "L" | 'R' = step[0];
+  instructions.forEach(step => {
+    const dir: 'L' | 'R' = step[0];
     const magnitude = parseInt(step.slice(1), 10);
     if (dir === 'L') {
       modifier = -1;
@@ -48,7 +48,7 @@ const part2 = () => {
 
   debugLog(instructions);
 
-  instructions.forEach((step) => {
+  instructions.forEach(step => {
     const dir: 'L' | 'R' = step[0];
     const magnitude = parseInt(step.slice(1), 10);
     if (dir === 'L') {
@@ -59,7 +59,7 @@ const part2 = () => {
     let zeroPasses = Math.floor(magnitude / dialSize);
     const lastDialPosition = dialPosition;
     dialPosition = dialPosition + ((modifier * magnitude) % dialSize);
-    if (dialPosition === 0 && lastDialPosition != 0) {
+    if (dialPosition === 0 && lastDialPosition !== 0) {
       // if we ended up at zero and didn't come from zero, count it
       zeroPasses++;
     } else if (dialPosition < 0) {
