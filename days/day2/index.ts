@@ -51,11 +51,20 @@ const isInvalidPart2 = (input: string, range: string) => {
     if (length % i !== 0) {
       continue;
     }
-    const sub = input.substring(0, i);
-    const replaced = input.replaceAll(sub, '');
-    isInvalid = replaced === '';
+    isInvalid = true;
+    const substrToCheck = input.substring(0, i);
+    let remainder = input.substring(i);
+    // look at the next i characters of the input and exit early
+    // if they dont match.
+    while (remainder.length >= i) {
+      if (remainder.substring(0, i) === substrToCheck) {
+        remainder = remainder.substring(i);
+      } else {
+        isInvalid=false;
+        break;
+      }
+    }
     if (isInvalid) {
-      debugLog(`--- ${sub} is invalid for ${input} in range ${range} ---`);
       break;
     }
   }
