@@ -2,7 +2,7 @@ import {readFileSync} from 'fs';
 import * as _ from 'lodash';
 import path from 'path';
 
-import {debugLog} from '../utils/utils';
+import {debugLog, timeIt} from '../utils/utils';
 
 const inputFileName =
   process.env.AOC_DEMO === 'true' ? './demo.txt' : './input.txt';
@@ -80,5 +80,5 @@ const part2 = () => {
   console.log(`\nPart 2: ${solution}`);
 };
 
-part1();
-part2();
+timeIt(part1);
+timeIt(part2);
