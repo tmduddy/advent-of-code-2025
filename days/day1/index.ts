@@ -21,7 +21,7 @@ const part1 = () => {
   debugLog(instructions);
 
   instructions.forEach(step => {
-    const dir: 'L' | 'R' = step[0];
+    const dir = step[0];
     const magnitude = parseInt(step.slice(1), 10);
     if (dir === 'L') {
       modifier = -1;
@@ -53,7 +53,7 @@ const part2 = () => {
   debugLog(instructions);
 
   instructions.forEach(step => {
-    const dir: 'L' | 'R' = step[0];
+    const dir = step[0];
     const magnitude = parseInt(step.slice(1), 10);
     if (dir === 'L') {
       modifier = -1;
