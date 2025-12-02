@@ -11,6 +11,7 @@
     "day:new": "./build/newDay.sh",
     "day:demo": "npm run compile && AOC_DEMO=true ./build/runDay.sh",
     "day:debug": "npm run compile && AOC_DEBUG=true ./build/runDay.sh",
+    "day:time": "npm run compile && AOC_TIME=true AOC_DEMO=false ./build/runDay.sh",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "gts lint",
     "clean": "gts clean",
