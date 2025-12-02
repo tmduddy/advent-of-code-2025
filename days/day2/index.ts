@@ -17,13 +17,9 @@ const isInvalid = (input: string) => {
   if (length % 2 !== 0) {
     return false;
   }
-  // split in half
+  // split in half and compare
   const half = length / 2;
-  const front = input.substring(0, half);
-  const back = input.substring(half);
-
-  // compare halves
-  return front === back;
+  return input.substring(0, half) === input.substring(half);
 };
 
 const part1 = () => {
@@ -33,12 +29,13 @@ const part1 = () => {
   ids.forEach(range => {
     const [first, last] = range.split('-').map(Number);
     const allIds = _.range(first, last + 1).map(i => i.toString());
+    debugLog(allIds);
     invalidIds.push(...allIds.filter(isInvalid).map(Number));
   });
 
   debugLog(invalidIds);
 
-  const solution = invalidIds.reduce((a, c) => a + c, 0);
+  const solution = _.sum(invalidIds);
   console.log(`\nPart 1: ${solution}`);
 };
 
@@ -50,6 +47,10 @@ const isInvalidPart2 = (input: string, range: string) => {
   const half = Math.ceil(length / 2);
   let isInvalid = false;
   for (let i = 1; i <= half; i++) {
+    // only check substrings that evenly divide the input
+    if (length % i !== 0) {
+      continue;
+    }
     const sub = input.substring(0, i);
     const replaced = input.replaceAll(sub, '');
     isInvalid = replaced === '';
@@ -76,7 +77,7 @@ const part2 = () => {
 
   debugLog(invalidIds);
 
-  const solution = invalidIds.reduce((a, c) => a + c, 0);
+  const solution = _.sum(invalidIds);
   console.log(`\nPart 2: ${solution}`);
 };
 
