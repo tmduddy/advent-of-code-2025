@@ -10,7 +10,7 @@ export const debugLog = (...args: any[]) => {
 /**
  * print out timing information
  */
-export const timeIt = (fn: ()=>void) => {
+export const timeIt = (fn: () => void) => {
   if (process.env.AOC_TIME === 'true') {
     const start = performance.now();
     fn();
@@ -19,4 +19,4 @@ export const timeIt = (fn: ()=>void) => {
   } else {
     fn();
   }
-}
+};

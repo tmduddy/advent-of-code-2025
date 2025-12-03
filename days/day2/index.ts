@@ -60,7 +60,7 @@ const isInvalidPart2 = (input: string, range: string) => {
       if (remainder.substring(0, i) === substrToCheck) {
         remainder = remainder.substring(i);
       } else {
-        isInvalid=false;
+        isInvalid = false;
         break;
       }
     }

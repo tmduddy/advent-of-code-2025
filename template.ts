@@ -21,5 +21,5 @@ const part2 = () => {
   console.log(`\nPart 2: ${solution}`);
 };
 
-timeIt(part1());
-timeIt(part2());
+timeIt(part1);
+timeIt(part2);
