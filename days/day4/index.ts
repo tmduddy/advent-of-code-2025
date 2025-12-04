@@ -125,7 +125,7 @@ const part2 = () => {
   let grid = input.filter(Boolean).map(row => row.split(''));
   let numAccessible = 0;
   let runs = 0;
-  while (runs > 0 && numAccessible !== 0) {
+  while (true) {
     const {grid: newGrid, numAccessible: numPulled} = processGrid(grid);
     if (doGridsMatch(grid, newGrid, grid.length, grid[0].length)) {
       break;
