@@ -15,6 +15,7 @@ const part1 = () => {
   const banks = input.filter(Boolean);
 
   let joltageSum = 0;
+
   banks.forEach(bank => {
     const bankSize = bank.length;
     const maxTens = Math.max(
@@ -50,7 +51,7 @@ const getMaxDigitAndIndex = (
   );
   const maxDigitIndex = bank.substring(startIndex).indexOf(maxDigit.toString());
   return {
-    maxDigit,
+    digit: maxDigit,
     index: maxDigitIndex,
   };
 };
@@ -64,16 +65,16 @@ const part2 = () => {
     let startIndex = 0;
     debugLog(`--- bank: ${bank} ---`);
     for (let i = 11; i >= 0; i--) {
-      const maxDigitAndIndex = getMaxDigitAndIndex(
+      const {digit, index} = getMaxDigitAndIndex(
         bank,
         startIndex,
         i,
         bankSize,
       );
-      startIndex += maxDigitAndIndex.index + 1;
-      joltageSum += maxDigitAndIndex.maxDigit * 10 ** i;
+      startIndex += index + 1;
+      joltageSum += digit * 10 ** i;
       debugLog(
-        `max digit and index for factor 10^${i} is ${maxDigitAndIndex.maxDigit} at ${maxDigitAndIndex.index}`,
+        `factor 10^${i}: ${digit} at ${index}`,
       );
     }
   });
