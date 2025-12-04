@@ -65,17 +65,10 @@ const part2 = () => {
     let startIndex = 0;
     debugLog(`--- bank: ${bank} ---`);
     for (let i = 11; i >= 0; i--) {
-      const {digit, index} = getMaxDigitAndIndex(
-        bank,
-        startIndex,
-        i,
-        bankSize,
-      );
+      const {digit, index} = getMaxDigitAndIndex(bank, startIndex, i, bankSize);
       startIndex += index + 1;
       joltageSum += digit * 10 ** i;
-      debugLog(
-        `factor 10^${i}: ${digit} at ${index}`,
-      );
+      debugLog(`factor 10^${i}: ${digit} at ${index}`);
     }
   });
 
