@@ -19,10 +19,8 @@ const part1 = () => {
 
   ingredients.forEach(ingredient => {
     let alreadyFound = false;
-    // debugLog(ingredient);
     ranges.forEach(range => {
       if (!alreadyFound) {
-        // debugLog(range);
         const [start, end] = range.split('-').map(Number);
         const id = Number(ingredient);
         if (id >= start && id <= end) {
