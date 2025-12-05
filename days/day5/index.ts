@@ -1,5 +1,4 @@
 import {readFileSync} from 'fs';
-import _ from 'lodash';
 import path from 'path';
 
 import {debugLog, timeIt} from '../utils/utils';
@@ -10,7 +9,6 @@ const input = readFileSync(path.resolve(__dirname, inputFileName), {
   encoding: 'utf8',
   flag: 'r',
 }).split('\n');
-// debugLog(input);
 
 const part1 = () => {
   const lineBreak = input.indexOf('');
@@ -39,37 +37,19 @@ const part1 = () => {
   console.log(`\nPart 1: ${solution}`);
 };
 
-const addComparisons = (
-  comparisons: Set<string>,
-  rIdx: number,
-  compIdx: number,
-) => {
-  comparisons.add(`${rIdx}_${compIdx}`);
-  comparisons.add(`${compIdx}_${rIdx}`);
-};
-
 const part2 = () => {
   const lineBreak = input.indexOf('');
   const ranges = input.slice(0, lineBreak);
 
   const allRanges = ranges.map(r => r.split('-').map(Number));
-
-  allRanges.forEach((range, rIdx) => {
-    debugLog(`R_${rIdx}: ${range.join('-')}`);
-  });
-
-  const comparisons: Set<string> = new Set();
   const freshRanges: Set<string> = new Set();
 
   allRanges.forEach((range, rIdx) => {
-    let [freshStart, freshEnd] = structuredClone(range);
+    let [freshStart, freshEnd] = range;
     debugLog(`R_${rIdx}: ${range.join('-')}`);
     allRanges.forEach((compRange, compIdx) => {
       const [compStart, compEnd] = compRange;
       if (rIdx !== compIdx) {
-        // && !comparisons.has(`${rIdx}_${compIdx}`)){
-        addComparisons(comparisons, rIdx, compIdx);
-        // debugLog(`starting comparison for R_${rIdx} against C_${compIdx}`);
         // if my end is in your range but my start is not:
         if (
           freshEnd >= compStart &&
@@ -107,22 +87,20 @@ const part2 = () => {
         }
       }
     });
-    debugLog(`final fresh range for R_${rIdx} is ${freshStart}-${freshEnd}`);
+    // change the range in place to the new, all-fresh array
     allRanges[rIdx] = [freshStart, freshEnd];
-    if (freshStart > freshEnd) {
-      debugLog(`R_${rIdx} is fully accounted for in other ranges.`);
-    } else {
+
+    if (!(freshStart > freshEnd)) { 
       freshRanges.add(`${freshStart}-${freshEnd}`);
     }
   });
-  debugLog(freshRanges);
 
   const fresh = [...freshRanges].reduce((numFresh, currRange) => {
-    const [start, end] = currRange.split('-').map(Number);
-    if (start === 0 && end === 0) {
-      return numFresh;
+    if (currRange !== '0-0') {
+      const [start, end] = currRange.split('-').map(Number);
+      return numFresh + 1 + (end - start);
     }
-    return numFresh + 1 + (end - start);
+    return numFresh;
   }, 0);
 
   const solution = fresh;
