@@ -13,19 +13,10 @@ const input = readFileSync(path.resolve(__dirname, inputFileName), {
   .filter(Boolean);
 debugLog(input);
 
-const transpose = (grid: string[][]): string[][] => {
-  const numRows = grid.length;
-  const numCols = grid[0].length;
-  const transposed: string[][] = Array.from({length: numCols}).map(_ =>
-    Array.from({length: numRows}),
-  );
-  grid.forEach((row, i) => {
-    row.forEach((col, j) => {
-      transposed[j][i] = col;
-    });
-  });
-
-  return transposed;
+const transpose = (grid: string[][]) => {
+  return grid.reduce((transposed: string[][], row: string[]) => {
+    return row.map((_, i) => (transposed[i] || []).concat(row[i]));
+  }, []);
 };
 
 const part1 = () => {
@@ -39,15 +30,10 @@ const part1 = () => {
   problems.forEach(problem => {
     const op = problem[problem.length - 1];
     const nums = problem.slice(0, -1).map(Number);
-    switch (op) {
-      case '*':
-        finalSum += nums.reduce((product, num) => product * num);
-        break;
-      case '+':
-        finalSum += nums.reduce((sum, num) => sum + num);
-        break;
-      default:
-        break;
+    if (op === '*') {
+      finalSum += nums.reduce((product, num) => product * num);
+    } else if (op === '+') {
+      finalSum += nums.reduce((sum, num) => sum + num);
     }
   });
 
@@ -64,6 +50,7 @@ const parseRow = (row: string, maxWidthEachCol: number[]): string[] => {
   let start = 0;
   maxWidthEachCol.forEach(colWidth => {
     const len = colWidth + start;
+    // left or right pad digits with 0s to fill max column width
     parsedRow.push(row.substring(start, len).replaceAll(' ', '0'));
     // account for the space between cols
     start = len + 1;
@@ -73,6 +60,8 @@ const parseRow = (row: string, maxWidthEachCol: number[]): string[] => {
 };
 
 const numsToCephalopodNums = (nums: string[]): string[] => {
+  // nums is a single "column" of input numbers, which we know
+  // all share the same width
   const colWidth: number = nums[0].length;
   const cephNums = [];
   for (let i = 0; i < colWidth; i++) {
@@ -88,32 +77,26 @@ const numsToCephalopodNums = (nums: string[]): string[] => {
 };
 
 const part2 = () => {
+  // find the "widest" number in each column
   const maxWidthEachCol = transpose(
     input.map(r => r.split(' ').filter(Boolean)),
   )
     .map(r => r.map(c => c.length))
     .map(r => Math.max(...r));
-  debugLog(maxWidthEachCol);
 
-  const parsed = input.map(row => parseRow(row, maxWidthEachCol));
-  debugLog('parsed', parsed);
-  const problems = transpose(parsed);
+  // split the inputs into columns based on the known width of each
+  const problems = transpose(input.map(row => parseRow(row, maxWidthEachCol)));
   debugLog(problems);
-  let finalSum = 0;
 
+  let finalSum = 0;
   problems.forEach(problem => {
     const op = problem[problem.length - 1];
     const nums = numsToCephalopodNums(problem.slice(0, -1)).map(Number);
-    debugLog(op, nums);
-    switch (op) {
-      case '*':
-        finalSum += nums.reduce((product, num) => product * num);
-        break;
-      case '+':
-        finalSum += nums.reduce((sum, num) => sum + num);
-        break;
-      default:
-        break;
+
+    if (op === '*') {
+      finalSum += nums.reduce((product, num) => product * num);
+    } else if (op === '+') {
+      finalSum += nums.reduce((sum, num) => sum + num);
     }
   });
 
