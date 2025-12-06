@@ -8,7 +8,9 @@ const inputFileName =
 const input = readFileSync(path.resolve(__dirname, inputFileName), {
   encoding: 'utf8',
   flag: 'r',
-}).split('\n');
+})
+  .split('\n')
+  .filter(Boolean);
 debugLog(input);
 
 const transpose = (grid: string[][]): string[][] => {
@@ -32,7 +34,6 @@ const part1 = () => {
       .map(r => r.split(' ').filter(i => i && i !== ' '))
       .filter(i => i.length > 0),
   );
-  debugLog(problems);
   let finalSum = 0;
 
   problems.forEach(problem => {
@@ -54,18 +55,56 @@ const part1 = () => {
   console.log(`\nPart 1: ${solution}`);
 };
 
+const parseRow = (row: string, maxWidthEachCol: number[]): string[] => {
+  if (row.includes('+')) {
+    return row.split(' ').filter(Boolean);
+  }
+
+  const parsedRow: string[] = [];
+  let start = 0;
+  maxWidthEachCol.forEach(colWidth => {
+    const len = colWidth + start;
+    parsedRow.push(row.substring(start, len).replaceAll(' ', '0'));
+    // account for the space between cols
+    start = len + 1;
+  });
+
+  return parsedRow;
+};
+
+const numsToCephalopodNums = (nums: string[]): string[] => {
+  const colWidth: number = nums[0].length;
+  const cephNums = [];
+  for (let i = 0; i < colWidth; i++) {
+    cephNums.push(
+      nums.reduce(
+        (cephNum, elfNum) => (cephNum += elfNum[i] !== '0' ? elfNum[i] : ''),
+        '',
+      ),
+    );
+  }
+
+  return cephNums;
+};
+
 const part2 = () => {
-  const problems = transpose(
-    input
-      .map(r => r.split(' ').filter(i => i && i !== ' '))
-      .filter(i => i.length > 0),
-  );
+  const maxWidthEachCol = transpose(
+    input.map(r => r.split(' ').filter(Boolean)),
+  )
+    .map(r => r.map(c => c.length))
+    .map(r => Math.max(...r));
+  debugLog(maxWidthEachCol);
+
+  const parsed = input.map(row => parseRow(row, maxWidthEachCol));
+  debugLog('parsed', parsed);
+  const problems = transpose(parsed);
   debugLog(problems);
   let finalSum = 0;
 
   problems.forEach(problem => {
     const op = problem[problem.length - 1];
-    const nums = problem.slice(0, -1).map(Number);
+    const nums = numsToCephalopodNums(problem.slice(0, -1)).map(Number);
+    debugLog(op, nums);
     switch (op) {
       case '*':
         finalSum += nums.reduce((product, num) => product * num);
