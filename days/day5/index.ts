@@ -88,7 +88,7 @@ const part2 = () => {
     // change the range in place to the new, all-fresh array
     allRanges[rIdx] = [freshStart, freshEnd];
 
-    if (!(freshStart > freshEnd)) { 
+    if (!(freshStart > freshEnd)) {
       freshRanges.add(`${freshStart}-${freshEnd}`);
     }
   });
