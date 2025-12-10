@@ -28,7 +28,7 @@ const part1 = () => {
   // { [distance]: 'srcBoxId;destBoxId' }
   const distanceBoxes: Map<number, string> = new Map();
   boxes.forEach((box, idx) => {
-    // we can use idx+1 here because we dont need to include idx->idx 
+    // we can use idx+1 here because we dont need to include idx->idx
     // and circuits are bi-directional which means we've already covered
     // the cases where j < idx
     for (let j = idx + 1; j < numBoxes; j++) {
@@ -126,14 +126,12 @@ const part2 = () => {
 
   debugLog(sortedDistances.slice(0, 10));
 
-  let src: number = -1;
-  let dest: number = -1;
+  let src = -1;
+  let dest = -1;
   let largestCircuitSize = 0;
 
-  let count = 0;
   // for .. of loop so we can leverage `continue` and `break`
   for (const distance of sortedDistances) {
-    count++;
     if (largestCircuitSize === numBoxes) {
       break;
     }
