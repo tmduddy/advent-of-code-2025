@@ -1,3 +1,6 @@
+import _ from 'lodash';
+import {init, type Arith, type IntNum} from 'z3-solver';
+
 import {readFileSync} from 'fs';
 import path from 'path';
 
@@ -11,7 +14,7 @@ const input = readFileSync(path.resolve(__dirname, inputFileName), {
 })
   .split('\n')
   .filter(Boolean);
-debugLog(input);
+// debugLog(input);
 
 // I googled for this one, basically replaces pythons itertools.combinations
 // ex. combinations([1, 2, 3], 2) -> [[1, 2], [1, 3], [2, 3]]
@@ -129,8 +132,80 @@ const part1 = () => {
   console.log(`\nPart 1: ${solution}`);
 };
 
-const part2 = () => {
-  const solution = 0;
+const part2 = async () => {
+  const machines = input.map(getParts);
+  const machineCount = machines.length;
+
+  const totalPresses: number[] = [];
+
+  let machineIndex = 0;
+  for (const {joltages, buttons} of machines) {
+    machineIndex++;
+    debugLog(`machine ${machineIndex} / ${machineCount}`);
+    const {Context} = await init();
+    const Z3 = Context('main');
+    const o = new Z3.Optimize();
+
+    // For every button, store a set of the joltage indices it affects
+    // we'll use this to build a system of equations
+    const buttonsArr: Array<Set<number>> = buttons.map(btn => {
+      return new Set(btn);
+    });
+
+    // Assign every button to a Z3 Int var named by position
+    const z3Vars = new Z3.AstVector<Arith>();
+    buttonsArr.forEach((_, n) => {
+      z3Vars.push(Z3.Int.const(`n${n}`));
+    });
+
+    // Add constraint that each buton must be hit 0+ times
+    for (let i = 0; i < z3Vars.length(); i++) {
+      o.add(z3Vars.get(i).ge(0));
+    }
+
+    // Add constraint that each button's components must sum up to the joltage at that index
+    joltages.forEach((joltage, j) => {
+      // Get an intial zero to start from
+      const e: Arith | IntNum = Z3.Int.val(0);
+      // Build a summation like (+ 0 n0 n1 n2...)
+      // and constrain it equal to joltage (= (+ 0 n0 ...) joltage)
+      o.add(
+        buttonsArr
+          .reduce((eq, btn, b) => {
+            // only include a button in this if its presses can affect the joltage at i
+            if (btn.has(j)) {
+              eq = eq.add(z3Vars.get(b));
+            }
+            return eq;
+          }, e)
+          .eq(joltage),
+      );
+    });
+
+    // build a sum of all Int vars so we have something to optimize for
+    let sumEq: Arith | IntNum = Z3.Int.val(0);
+    for (const v of z3Vars) {
+      sumEq = sumEq.add(v);
+    }
+
+    // optimize to a minimum sum of all Int vars
+    o.minimize(sumEq);
+
+    // pull out the optimized presses for each button
+    let localPresses = 0;
+    if ((await o.check()) === 'sat') {
+      const model = o.model();
+      for (const v of z3Vars) {
+        const presses = model.eval(v);
+        localPresses += Number(presses);
+      }
+    }
+
+    totalPresses.push(localPresses);
+  }
+
+  debugLog(totalPresses);
+  const solution = _.sum(totalPresses);
   console.log(`\nPart 2: ${solution}`);
 };
 
