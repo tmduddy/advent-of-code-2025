@@ -132,6 +132,12 @@ const part1 = () => {
   console.log(`\nPart 1: ${solution}`);
 };
 
+// this one took a wild amount of googling.
+// shout out to YALPS which _almost_ got me there - https://github.com/IanManske/YALPS
+// shout out to z3-solver which did get me there - https://github.com/Z3Prover/z3
+// shout out to all the tutorials i had to read
+//   - https://microsoft.github.io/z3guide/programming/Z3%20JavaScript%20Examples/#bit-vectors
+//   - https://fletcheaston.com/advent-of-code/2024/day-13#part-2-solution
 const part2 = async () => {
   const machines = input.map(getParts);
   const machineCount = machines.length;
