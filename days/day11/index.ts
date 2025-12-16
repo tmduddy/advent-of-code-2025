@@ -64,6 +64,8 @@ const part1 = () => {
   console.log(`\nPart 1: ${solution}`);
 };
 
+// standard DFS graph traversal with a DP memo + optional helpers
+// for avoiding certain nodes and short circuiting dead ends
 const dfs = (
   node: string,
   visitedNodes: Set<string>,
@@ -156,19 +158,21 @@ const dfs = (
   return pathCount;
 };
 
+// use top down/memo DP to find the paths from every node to 
+// a given target node, x
 const getPathsToX = (
   x: string,
   graph: Record<string, Set<string>>,
   mustNotInclude?: Set<string>,
-  source?: string,
   deadEndMap?: Map<string, boolean>,
 ): Map<string, number> => {
   // loop through every start point -> x and store the path counts
-  // prioritizing short paths to start and building out from there DP style
+  // prioritizing short paths to start and building out from there
   const pathMapToX = new Map<string, number>();
   const nodesNotExplored = new Set(Object.keys(graph));
   let keysToSearch = new Set([x]);
   let lastKeysSearched = new Set();
+
   while (
     nodesNotExplored.size > 0 &&
     // if we're looking for the same set of keys twice in a row, bail
@@ -211,9 +215,6 @@ const getPathsToX = (
         ),
       );
     });
-    if (source && nodes.includes(source)) {
-      break;
-    }
   }
 
   return pathMapToX;
@@ -250,14 +251,12 @@ const part2 = () => {
     'dac',
     graph,
     new Set(['out', 'fft']),
-    undefined,
     dacDeadEndMap,
   );
   const allPathsToDac = getPathsToX(
     'dac',
     graph,
     new Set(['out']),
-    undefined,
     dacDeadEndMap,
   );
 
@@ -272,14 +271,12 @@ const part2 = () => {
     'fft',
     graph,
     new Set(['out', 'dac']),
-    undefined,
     fftDeadEndMap,
   );
   const allPathsToFft = getPathsToX(
     'fft',
     graph,
     new Set(['out']),
-    undefined,
     fftDeadEndMap,
   );
   const svr2fft0dac = pathMapToFftNoDac.get('svr') || 0;
